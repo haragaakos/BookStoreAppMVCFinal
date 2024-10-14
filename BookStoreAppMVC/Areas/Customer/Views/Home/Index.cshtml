@@ -1,0 +1,36 @@
+﻿
+@model IEnumerable<Product>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <main class="flex-grow-1">
+        <div class="container py-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col">
+                        <div class="card product-card border-0 p-3 shadow border-top border-5 rounded">
+                            <img src="@product.ImageUrl" class="card-img-top rounded product-image" alt="@product.Title" />
+                            <div class="card-body pb-0 product-body">
+                                <h5 class="card-title product-title text-dark opacity-75 text-uppercase text-center">@product.Title</h5>
+                                <p class="card-text product-author text-warning text-center">by <b>@product.Author</b></p>
+                                <p class="text-dark text-opacity-75 text-center">Ár: <span>@product.Price Ft</span></p>
+                                <div class="product-actions">
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary bg-gradient border-0 form-control mb-2">Details</a>
+                                    @if (User.IsInRole(StaticDetails.RoleAdmin) || User.IsInRole(StaticDetails.RoleCustomer))
+                                    {
+                                        <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+                                            <div class="input-group mb-2">
+                                                <input type="hidden" name="productId" value="@product.Id" />
+                                                <input type="number" name="quantity" value="1" min="1" class="form-control" />
+                                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                            </div>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+</div>
